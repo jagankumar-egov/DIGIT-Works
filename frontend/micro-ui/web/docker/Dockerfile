@@ -4,13 +4,14 @@ RUN apk update && apk upgrade
 RUN apk add --no-cache git>2.30.0
 ARG WORK_DIR
 WORKDIR /app
-ENV NODE_OPTIONS "--max-old-space-size=8168"
+ENV NODE_OPTIONS "--max-old-space-size=7168"
 
 COPY ${WORK_DIR} .
 RUN ls -lah
 
 #RUN node web/envs.js
-RUN cd web/ \
+RUN cd frontend/micro-ui/web/ \
+    && node envs.js \
     &&  ./install-deps.sh \
     && yarn install \
     && yarn build 
