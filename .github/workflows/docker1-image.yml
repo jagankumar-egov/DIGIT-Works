@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: cd frontend/micro-ui && docker build -t egovio/works-ui:develop-3eb63f6365-2 -f Dockerfile .
+      run: cd frontend/micro-ui && docker build -t jaganegov/works-ui:develop-3eb63f6365-1 -f Dockerfile . && docker push jaganegov/works-ui:develop-3eb63f6365-1
