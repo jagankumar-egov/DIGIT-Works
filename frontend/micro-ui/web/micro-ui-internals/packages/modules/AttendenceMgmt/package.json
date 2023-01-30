@@ -1,7 +1,7 @@
 {
   "name": "@egovernments/digit-ui-module-attendencemgmt",
   "version": "0.0.1",
-  "description": "Attendence Management Module UI",
+  "description": "Attendence Management Module UI ",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/Module.js",
