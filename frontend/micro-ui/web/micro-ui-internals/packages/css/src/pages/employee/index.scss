@@ -1,4 +1,3 @@
-@import "./login.scss";
 /* TODO: convert using tailwind */
 .employee {
   .breadcrumb {
@@ -23,7 +22,7 @@
     position: fixed;
     top: 0;
     width: 100%;
-    padding: 16px 24px;
+    padding: 15px 24px;
     background: white;
     box-shadow: rgba(0, 0, 0, 0.24) 0 1px 4px;
     z-index: 9999;
@@ -33,27 +32,29 @@
 
       &.city {
         margin-right: 8px;
-        height: 48px;
-        width: 48px;
+        height: 52px;
+        width: 52px;
       }
 
       &.state {
-        height: 20px;
-        max-height: 20px;
+        height: 35px;
+        max-height: 35px;
         width: auto;
       }
     }
 
     .ulb {
       font-weight: bold;
+      font-size: 22px;
+      line-height: 26px;
     }
 
     .right {
       float: right;
-      margin-top: 12px;
+      margin-top: 0px;
 
       .user-img-txt {
-        background: #f47738;
+        background: theme(colors.primary.main);
         padding: 10px 15px;
         border-radius: 50%;
         color: white;
@@ -115,7 +116,7 @@
     height: 100%;
     color: #ffffff;
     margin-top: 80px;
-    z-index: 10;
+    z-index: 22;
     transition: 0.3s ease all;
     white-space: nowrap;
     height: calc(100vh - 36px);
@@ -146,11 +147,18 @@
       padding: 20px;
       font-size: 14px;
       &.active {
-        color: #f47738 !important;
+        color: theme(colors.primary.main) !important;
 
-        border-right: 4px solid #f47738;
+        border-right: 4px solid theme(colors.primary.main);
         svg {
-          fill: #f47738 !important;
+          fill: theme(colors.primary.main) !important;
+        }
+        .actions{
+          svg {
+            path{
+              fill: theme(colors.primary.main) !important;
+            }
+          }
         }
       }
       .employee-search-input {
@@ -176,12 +184,12 @@
       }
 
       &:hover {
-        color: #f47738 !important;
+        color: theme(colors.primary.main) !important;
         background-color: #486480;
 
         cursor: pointer;
         svg {
-          fill: #f47738 !important;
+          fill: theme(colors.primary.main) !important;
         }
       }
       .search-icon-wrapper {
@@ -223,11 +231,11 @@
         }
       }
       &.active {
-        color: #f47738 !important;
+        color: theme(colors.primary.main) !important;
 
-        border-right: 4px solid #f47738;
+        border-right: 4px solid theme(colors.primary.main);
         svg {
-          fill: #f47738 !important;
+          fill: theme(colors.primary.main) !important;
         }
       }
     }
@@ -349,6 +357,12 @@
   }
 }
 
+.textoverflow{
+    overflow: hidden;
+    display: block;
+    max-width: var(--max-width);
+}
+
 .RightMostTopBarOptions {
   @apply flex;
   .EventNotificationWrapper {
@@ -373,7 +387,8 @@
 @media (min-width: 640px) {
   .employee {
     .ground-container {
-      @apply block ml-md;
+      @apply block;
+      margin-left: 0px;
     }
     .breadcrumb {
       @apply mb-lg;
@@ -393,9 +408,11 @@
     .main {
       display: flex;
       flex-direction: column;
-      padding-top: 80px;
-      margin-left: 72px;
-      width: calc(100%-83px);
+      margin-left: 55px;
+      width: calc(100%-55px);
+      .customEmployeeCard{
+        width:288px !important
+      }
     }
     .citizen-home-container {
       display: flex;
@@ -495,3 +512,35 @@
     margin-right: 16px;
   }
 }
+
+.status-row-radio-wrapper {
+  margin-right: 1rem;
+  input[type="radio"] {
+    margin-right: 1rem;
+  }
+}
+.total-value-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.total-wrapper {
+  margin: 1rem 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  font-weight: bolder;
+}
+
+.total-wrapper .label {
+  text-align: left;
+}
+
+.total-wrapper .value {
+  text-align: right;
+}
+
+.banner{
+  .bannerLogo{
+    width:140px;
+  }
+} 

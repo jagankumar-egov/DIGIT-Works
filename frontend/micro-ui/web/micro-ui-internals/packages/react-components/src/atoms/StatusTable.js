@@ -14,6 +14,7 @@ export const Row = (props) => {
   let value = props.text;
   let valueStyle = props.textStyle || {};
   let labelStyle = props.labelStyle || {};
+  let amountStyle = props.amountStyle || {}
   if (Array.isArray(props.text)) {
     value = props.text.map((val, index) => {
       if (val?.className) {
@@ -55,9 +56,11 @@ export const Row = (props) => {
 
   return (
     <div style={props.rowContainerStyle} className={`${props.last ? "row last" : "row"} ${props?.className || ""}`}>
-      <h2 style={labelStyle}>{props.label}</h2>
+      <h2 style={labelStyle}>{props.label}{props?.isMandotary && '*'}</h2>
       <div className="value" style={valueStyle}>
-        {value}
+        {
+          props?.isValueLink ? (<p className="status-value-link" onClick={props?.navigateLinkHandler}>{value}</p>) : <p style={amountStyle}>{value}</p> 
+        }
         {props?.privacy && (
           <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
             <UnMaskComponent privacy={props?.privacy}></UnMaskComponent>
@@ -98,7 +101,7 @@ export const StatusTable = (props) => {
     );
   } else {
     return (
-      <div className={employee ? "employee-data-table" : "data-table"} style={props.style}>
+      <div className={employee ? `employee-data-table ${props?.customClass ? props?.customClass : ""}` : "data-table"} style={props.style}>
         {props.children}
       </div>
     );

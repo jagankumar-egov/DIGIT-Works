@@ -37,6 +37,35 @@ export const formatter = (value, symbol, unit, commaSeparated = true, t) => {
   }
 };
 
+export const formatterWithoutRound = (value, symbol, unit, commaSeparated = true, t) => {
+  if (!value && value !== 0) return "";
+  switch (symbol) {
+    case "amount":
+      return amountFormatter(value, unit, t);
+    //this case needs to be removed as backend should handle case sensitiviy from their end
+    case "Amount":
+      return amountFormatter(value, unit, t);
+    case "number":
+      if (!commaSeparated) {
+        return parseInt(value);
+      }
+      const Nformatter = new Intl.NumberFormat("en-IN");
+      return Nformatter.format(value);
+    case "percentage":
+      const Pformatter = new Intl.NumberFormat("en-IN", { maximumSignificantDigits: 3 });
+      return `${Pformatter.format(value.toFixed(2))} %`;
+    default:
+      return "";
+  }
+};
+
+export const convertFormatterToNumber = (value) => {
+  if (!value && value !== 0) return "";
+  else {
+    return parseFloat(value? String(value).replaceAll(/,/g, '') : value);
+  }
+};
+
 export const getDuration = (startDate, endDate) => {
   let noOfDays = (new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 3600 * 24);
   if (noOfDays > 91) {

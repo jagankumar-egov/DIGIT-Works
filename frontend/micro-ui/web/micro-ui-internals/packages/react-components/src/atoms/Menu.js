@@ -8,8 +8,8 @@ const Menu = (props) => {
     <div className="menu-wrap" style={props.style}>
       {props.options.map((option, index) => {
         return (
-          <div key={index} onClick={() => props.onSelect(option)}>
-            <p>{props.t ? props.t(option.forcedName || `${keyPrefix}_${props.optionKey ? option[props.optionKey] : option}`) : option}</p>
+          <div style={props?.actionStyle}  key={index} onClick={() => props.onSelect(option)}>
+            <p>{props.t ? props.t(Digit.Utils.locale.getTransformedLocale(option.forcedName || `${keyPrefix}_${props.optionKey ? option[props.optionKey] : option}`)) : option}</p>
           </div>
         );
       })}
