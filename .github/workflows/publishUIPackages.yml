@@ -2,7 +2,11 @@ name: Node.js Publish UI Packages
 
 on:
   push:
-    branches: [ develop , master ]
+    branches: 
+      # Push events on main branch
+      - 'master'
+      # Push events to branches matching refs/heads/mona/octocat
+      - 'develop'
     paths:
       - 'frontend/micro-ui/web/micro-ui-internals/**'
   pull_request:
