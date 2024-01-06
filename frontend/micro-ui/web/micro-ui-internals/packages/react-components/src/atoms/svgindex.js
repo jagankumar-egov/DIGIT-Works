@@ -589,6 +589,18 @@ function MeasurementIcon({ className, styles }) {
   );
 }
 
+function MeasurementMuktaIcon({ className, styles }) {
+  return (
+    <svg className={className} fill="#FFFFFF" style={{ ...styles }} width="24" height="24" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+     <g clip-path="url(#clip0_9180_23766)">
+      <path d="M35.0013 8.33333C33.1513 7.75 31.118 7.5 29.168 7.5C25.918 7.5 22.418 8.16667 20.0013 10C17.5846 8.16667 14.0846 7.5 10.8346 7.5C7.58463 7.5 4.08464 8.16667 1.66797 10V34.4167C1.66797 34.8333 2.08464 35.25 2.5013 35.25C2.66797 35.25 2.7513 35.1667 2.91797 35.1667C5.16797 34.0833 8.41797 33.3333 10.8346 33.3333C14.0846 33.3333 17.5846 34 20.0013 35.8333C22.2513 34.4167 26.3346 33.3333 29.168 33.3333C31.918 33.3333 34.7513 33.8333 37.0846 35.0833C37.2513 35.1667 37.3346 35.1667 37.5013 35.1667C37.918 35.1667 38.3346 34.75 38.3346 34.3333V10C37.3346 9.25 36.2513 8.75 35.0013 8.33333ZM35.0013 30.8333C33.168 30.25 31.168 30 29.168 30C26.3346 30 22.2513 31.0833 20.0013 32.5V13.3333C22.2513 11.9167 26.3346 10.8333 29.168 10.8333C31.168 10.8333 33.168 11.0833 35.0013 11.6667V30.8333Z" fill="#F47738"/>
+      <path d="M29.168 17.5C30.6346 17.5 32.0513 17.65 33.3346 17.9333V15.4C32.018 15.15 30.6013 15 29.168 15C26.3346 15 23.768 15.4833 21.668 16.3833V19.15C23.5513 18.0833 26.168 17.5 29.168 17.5Z" fill="#F47738"/>
+      </g>
+    </svg>
+  );
+}
+
+
 const InfoBannerIcon = ({ fill = "#3498DB",styles }) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style={{...styles}} viewBox="0 0 20 20" fill="none">
@@ -599,7 +611,7 @@ const InfoBannerIcon = ({ fill = "#3498DB",styles }) => {
     </svg>
   );
 };
-const ShareIcon = ({ styles, className,fill="#f47738" }) =>  (
+const ShareIcon = ({ styles, className, fill="#f47738" }) => (
   <svg style={{ ...styles }} className={className} width="18" height="20" viewBox="0 0 18 20" fill={fill} xmlns="http://www.w3.org/2000/svg">
     <path
       d="M15 14.08C14.24 14.08 13.56 14.38 13.04 14.85L5.91 10.7C5.96 10.47 6 10.24 6 10C6 9.76 5.96 9.53 5.91 9.3L12.96 5.19C13.5 5.69 14.21 6 15 6C16.66 6 18 4.66 18 3C18 1.34 16.66 0 15 0C13.34 0 12 1.34 12 3C12 3.24 12.04 3.47 12.09 3.7L5.04 7.81C4.5 7.31 3.79 7 3 7C1.34 7 0 8.34 0 10C0 11.66 1.34 13 3 13C3.79 13 4.5 12.69 5.04 12.19L12.16 16.35C12.11 16.56 12.08 16.78 12.08 17C12.08 18.61 13.39 19.92 15 19.92C16.61 19.92 17.92 18.61 17.92 17C17.92 15.39 16.61 14.08 15 14.08Z"
@@ -609,7 +621,7 @@ const ShareIcon = ({ styles, className,fill="#f47738" }) =>  (
 )
 
 const RupeeIcon = ({ className }) => (
-  <svg width="48" className={className} height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="48" className={className} height="48" viewBox="0 0 48 48" fill={fill} xmlns="http://www.w3.org/2000/svg">
     <rect width="48" height="48" rx="6" fill="#F47738" />
   </svg>
 );
@@ -1769,6 +1781,7 @@ export {
   PrintIcon,
   PropertyHouse,
   MeasurementIcon,
+  MeasurementMuktaIcon,
   PrimaryDownlaodIcon,
   InfoBannerIcon,
   ShareIcon,

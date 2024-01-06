@@ -1,6 +1,6 @@
-import { AddIcon, TextInput, Amount, Button, Dropdown, Loader, DeleteIcon } from "@egovernments/digit-ui-react-components";
+import { AddIcon, TextInput, Amount, Button, Dropdown, Loader, DeleteIcon, TextArea } from "@egovernments/digit-ui-react-components";
 
-import React, { Fragment, useEffect, useCallback } from "react";
+import React, { Fragment, useEffect, useCallback} from "react";
 import { useTranslation } from "react-i18next";
 import MeasureCard from "./MeasureCard";
 
@@ -123,11 +123,13 @@ const MeasureTable = (props) => {
         obj = { width: "1rem" };
         break;
       case 2:
-        if (((mode === "CREATEALL" || mode === "VIEWES" || mode === "CREATERE" || mode === "VIEWRE") && tableKey === "NONSOR") || (mode !== "CREATEALL" && mode !== "VIEWES" && mode !== "CREATERE" && mode !== "VIEWRE") ) obj = { width: "52%"}
+        if (((mode === "CREATEALL" || mode === "VIEWES" || mode === "CREATERE" || mode === "VIEWRE") && tableKey === "NONSOR") || (mode !== "CREATEALL" && mode !== "VIEWES" && mode !== "CREATERE" && mode !== "VIEWRE") ) (mode === "CREATERE" && tableKey === "NONSOR")? obj = { width: "77rem"} : obj = { width: "52%"}
         break;
       case 4:
         (((mode === "CREATEALL" || mode === "VIEWES" || mode === "CREATERE" || mode === "VIEWRE") && tableKey === "NONSOR") || (mode !== "CREATEALL" && mode !== "VIEWES" && mode !== "CREATERE" && mode !== "VIEWRE"))? obj = {width : "27rem"}  : obj = { width: "30%" };
         break;
+      case 5:
+        if(mode === "CREATERE" && tableKey === "NONSOR") obj = { width: "2rem" };
       default:
         obj = { width: "27rem" };
         break;
@@ -137,13 +139,13 @@ const MeasureTable = (props) => {
 
   const getColumns = (mode, t) => {
     if(mode === "CREATERE" && tableKey === "SOR")
-      return [t("WORKS_SNO"), t("SOR TYPE"), t("CODE"), t("PROJECT_DESC"), t("PROJECT_UOM"), t("CS_COMMON_RATE"), t("WORKS_ORIGINAL_QTY"), t("WORKS_ORIGINAL_AMT"), t("WORKS_REVISED_QTY"), t("WORKS_REVISED_AMT"), t("")];
+      return [t("WORKS_SNO"), t("SOR_TYPE"), t("WORKS_CODE"), t("PROJECT_DESC"), t("PROJECT_UOM"), t("CS_COMMON_RATE"), t("WORKS_ORIGINAL_QTY"), t("WORKS_ORIGINAL_AMT"), t("WORKS_REVISED_QTY"), t("WORKS_REVISED_AMT"), t("")];
     if (mode === "CREATEALL" && tableKey === "SOR") {
-      return [t("WORKS_SNO"), t("SOR TYPE"), t("CODE"), t("PROJECT_DESC"), t("PROJECT_UOM"), t("CS_COMMON_RATE"), t("WORKS_ESTIMATED_QUANTITY"), t("WORKS_ESTIMATED_AMOUNT"), t("")];
+      return [t("WORKS_SNO"), t("SOR_TYPE"), t("WORKS_CODE"), t("PROJECT_DESC"), t("PROJECT_UOM"), t("CS_COMMON_RATE"), t("WORKS_ESTIMATED_QUANTITY"), t("WORKS_ESTIMATED_AMOUNT"), t("")];
     } else if (mode === "VIEWES" && tableKey === "SOR") {
-      return [t("WORKS_SNO"), t("SOR TYPE"), t("CODE"), t("PROJECT_DESC"), t("PROJECT_UOM"), t("CS_COMMON_RATE"), t("WORKS_ESTIMATED_QUANTITY"), t("WORKS_ESTIMATED_AMOUNT")];
+      return [t("WORKS_SNO"), t("SOR_TYPE"), t("WORKS_CODE"), t("PROJECT_DESC"), t("PROJECT_UOM"), t("CS_COMMON_RATE"), t("WORKS_ESTIMATED_QUANTITY"), t("WORKS_ESTIMATED_AMOUNT")];
     } else if(mode === "VIEWRE" & tableKey === "SOR")
-      return [t("WORKS_SNO"), t("SOR TYPE"), t("CODE"), t("PROJECT_DESC"), t("PROJECT_UOM"), t("CS_COMMON_RATE"),t("WORKS_ORIGINAL_QTY"), t("WORKS_ORIGINAL_AMT"), t("WORKS_REVISIED_ESTIMATED_QUANTITY"), t("WORKS_REVISED_ESTIMATED_AMOUNT")];
+      return [t("WORKS_SNO"), t("SOR_TYPE"), t("WORKS_CODE"), t("PROJECT_DESC"), t("PROJECT_UOM"), t("CS_COMMON_RATE"),t("WORKS_ORIGINAL_QTY"), t("WORKS_ORIGINAL_AMT"), t("WORKS_REVISIED_ESTIMATED_QUANTITY"), t("WORKS_REVISED_ESTIMATED_AMOUNT")];
     else if (mode === "CREATEALL") {
       return [t("WORKS_SNO"), t("PROJECT_DESC"), t("PROJECT_UOM"), t("CS_COMMON_RATE"), t("WORKS_ESTIMATED_QUANTITY"), t("WORKS_ESTIMATED_AMOUNT"), t("")];
     } else if(mode === "CREATERE"){
@@ -213,10 +215,11 @@ const MeasureTable = (props) => {
       (key, value, index) => {
         const field = fields[index] || {};
         field[key] = value;
+        if(tableKey === "NONSOR" && key === "unitRate")
+          field["amount"] = (parseFloat(field[key]) * field["currentMBEntry"]) || 0
         fields[index] = { ...field };
         setFormValue(fields);
-      },
-      [setValue, tableKey]
+      }
     );
     return fields?.map((row, index) => {
       const consumedQty = row.currentMBEntry;
@@ -232,13 +235,19 @@ const MeasureTable = (props) => {
             {(mode == "CREATEALL" || mode == "CREATERE") && tableKey!="SOR" ? (
               <>
                 <td style={{margin:"0px",padding:"8px"}}>
-                  <TextInput
+                  { tableKey === "NONSOR"?
+                    <TextArea
+                    style={{ marginBottom: "0px", wordWrap: "break-word" }}
+                    onChange={(e) => handleInputChange("description", e.target.value, index)}
+                    value={row.description}
+                  />
+                    :<TextInput
                     style={{ width: "100%", marginTop: "20px"  }}
                     //  {...register(`SOR.${index}.description`)}
 
                     onChange={(e) => handleInputChange("description", e.target.value, index)}
                     value={row.description}
-                  />
+                  />}
                 </td>
                 <td>
                   <Dropdown
@@ -254,7 +263,7 @@ const MeasureTable = (props) => {
                 </td>
                 <td>
                   <TextInput
-                    style={{ width: "80%", marginTop: "20px", marginLeft: "20px" }}
+                    style={{ width: "80%", marginTop: "20px", marginLeft: (mode === "CREATERE" && tableKey === "NONSOR") ? "5px" : "20px" }}
                     onChange={(e) => handleInputChange("unitRate", e.target.value, index)}
                     value={row.unitRate}
                   />
@@ -276,7 +285,7 @@ const MeasureTable = (props) => {
             {(mode === "VIEWRE" || mode === "CREATERE") && (
               <>
                 <td>
-                  <Amount customStyle={{ textAlign: "right" }} value={row?.approvedQuantity?.toFixed?.(2) || 0} t={t} roundOff={false}></Amount>
+                  <Amount customStyle={{ textAlign: "right" }} value={row?.originalQty?.toFixed?.(2) || 0} t={t} roundOff={false}></Amount>
                 </td>
                 <td>
                   <Amount customStyle={{ textAlign: "right" }} value={row?.originalAmount || 0} t={t} roundOff={false}></Amount>
@@ -300,7 +309,7 @@ const MeasureTable = (props) => {
                   textInputStyle={{marginTop:"7px"}}
                   key={row?.id} // important to include key with field's id
                   // {...register(`${tableKey}.${index}.currentMBEntry`)}
-                  value={consumedQty}
+                  value={consumedQty?.toFixed(4)}
                   onChange={() => {}}
                   disable={initialState.length > 0 ? "true" : "false"}
                 />
@@ -384,7 +393,7 @@ const MeasureTable = (props) => {
                     amount: 0,
                     consumedQ: 0,
                     category:"NON-SOR",
-                    sNo: fields?.length-1,
+                    sNo: fields?.length+1,
                     currentMBEntry: 0,
                     uom: null,
                     description: "",
@@ -408,10 +417,10 @@ const MeasureTable = (props) => {
       <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end", margin: "20px" }}>
         <div style={{ display: "flex", flexDirection: "row", fontSize: "16px" }}>
           <span style={{ fontWeight: "bold", marginTop:"6px" }}>
-            {t("WORKS_TOTAL")} {t(props.config.key)} {t("WORKS_TOTAL_AMOUNT")} :
+            {t("WORKS_TABLE_TOTAL_AMOUNT")} :
           </span>
           <span style={{ marginLeft: "8px" }}>
-            <Amount customStyle={{ textAlign: "right", fontSize:"24px" }} value={sum?.toFixed?.(2) || 0} t={t} roundOff={false} rupeeSymbol={true}></Amount>
+            <Amount customStyle={{ textAlign: "right", fontSize:"24px", fontWeight:"700" }} value={parseFloat(sum)?.toFixed(2) || 0} t={t} roundOff={false} rupeeSymbol={true} sameDisplay={true}></Amount>
           </span>
         </div>
       </div>

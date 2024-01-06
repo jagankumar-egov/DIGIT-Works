@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { Link } from "react-router-dom";
+import { findMusterRollNumber } from "../utils/transformEstimateData";
 
 const CustomCollapsibleTable = ({ children, isTableCollapsed }) => {
   return <div className={`custom-collapsible-table ${isTableCollapsed ? "collapsed" : ""}`}>{children}</div>;
@@ -26,7 +27,8 @@ const MeasurementHistory = ({ contractNumber, measurementNumber }) => {
 
     body: {
       "contractNumber" : contractNumber,
-      "tenantId" : tenantId
+      "tenantId" : tenantId,
+      "key" : "View",
     }
 
   }
@@ -79,7 +81,7 @@ const MeasurementHistory = ({ contractNumber, measurementNumber }) => {
     .map((item, index) => ({
       sno: index + 1,
       mbref: {link:true, value:item?.measurementNumber, search:`?tenantId=${tenantId}&workOrderNumber=${contractNumber}&mbNumber=${item?.measurementNumber}`, pathname:window.location.pathname},
-      musterid: {link:true, value:data?.musterRollNumber, search:`?tenantId=${tenantId}&musterRollNumber=${data?.musterRollNumber}`, pathname:`/${window.contextPath}/employee/attendencemgmt/view-attendance`},
+      musterid: {link:true, value:findMusterRollNumber(data?.musterRolls, item?.measurementNumber, item?.additionalDetails?.startDate, item?.additionalDetails?.endDate), search:`?tenantId=${tenantId}&musterRollNumber=${findMusterRollNumber(data?.musterRolls, item?.measurementNumber, item?.additionalDetails?.startDate, item?.additionalDetails?.endDate)}`, pathname:`/${window.contextPath}/employee/attendencemgmt/view-attendance`},
       mbDate: Digit.Utils.pt.convertEpochToDate(item?.entryDate),
       period: t("NA"),
       status: formatStatus(item?.wfStatus),
@@ -103,7 +105,7 @@ const MeasurementHistory = ({ contractNumber, measurementNumber }) => {
             </tr>
           </thead>
           <tbody>
-            {sortedRows.map((row, rowIndex) => (
+            {sortedRows?.length > 0 ? sortedRows.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 {columns.map((column, columnIndex) => (
                   <td key={columnIndex}>
@@ -124,7 +126,10 @@ const MeasurementHistory = ({ contractNumber, measurementNumber }) => {
                   </td>
                 ))}
               </tr>
-            ))}
+            )):
+            <td colSpan={7} style={{marginLeft:"10px", color:"#9E9E9E", textAlign:"center"}}>
+              {t("WORKS_NO_DATA_PRESENT_IN_MB")}
+            </td>}
           </tbody>
         </table>
       </CustomCollapsibleTable>

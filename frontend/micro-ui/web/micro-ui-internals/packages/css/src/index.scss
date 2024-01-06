@@ -1041,11 +1041,10 @@ input[type="number"] {
   tr:nth-child(1) {
     td:nth-child(2) {
       .tooltip {
-        .tooltiptext {
-          top: 100% !important;
-          bottom: 0% !important;
-          height: max-content;
-        }
+          .tooltiptext {
+              bottom: 0% !important;
+              height: max-content;
+          }
       }
     }
   }

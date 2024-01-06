@@ -137,7 +137,7 @@ async function search_estimateDetails(tenantId, requestinfo, estimateNumber) {
   var params = {
     tenantId: tenantId,
     estimateNumber: estimateNumber,
-    limit: 1,
+    limit: 100,
     _offset: 0,
     get offset() {
       return this._offset;
@@ -169,10 +169,11 @@ async function search_user(uuid, tenantId, requestinfo) {
 }
 
 
-async function search_workflow(applicationNumber, tenantId, requestinfo) {
+async function search_workflow(applicationNumber, tenantId, requestinfo,history) {
   var params = {
     tenantId: tenantId,
     businessIds: applicationNumber,
+    history: history,
   };
   return await axios({
     method: "post",
@@ -475,6 +476,52 @@ async function create_bulk_pdf_pt(kafkaData) {
 
 }
 
+async function search_hrms(tenantId, requestinfo) {
+  var params = {
+    tenantId: tenantId,
+    sortOrder: "ASC",
+  };
+  return await axios({
+    method: "post",
+    url: url.resolve(config.host.hrms, config.paths.hrms_search),
+    data: requestinfo,
+    params,
+  });
+}
+
+async function search_mdms_terms_and_conditions(tenantId, requestinfo) {
+  var params = {
+    tenantId: tenantId.split(".")[0],
+    moduleName: "tenant",
+    masterName: "footer",
+  };
+
+  var searchEndpoint = config.paths.mdms_get;
+
+  return await axios({
+    method: "post",
+    url: url.resolve(config.host.mdms, searchEndpoint),
+    data: Object.assign(requestinfo),
+    params
+
+  });
+}
+
+async function search_measurementBookDetails(tenantId, requestinfo,contractNumber, measurementBookNumber) {
+
+  const searchEndpoint = config.paths.measurement_book_search;
+  const data = {
+    "contractNumber": contractNumber,
+    "measurementNumber": measurementBookNumber,
+    "tenantId": tenantId
+  }
+  return await axios({
+    method: "post",
+    url: url.resolve(config.host.measurements, searchEndpoint),
+    data: Object.assign(requestinfo, data)
+  });
+}
+
 module.exports = {
   pool,
   create_pdf,
@@ -498,5 +545,8 @@ module.exports = {
   upload_file_using_filestore,
   create_eg_payments_excel,
   reset_eg_payments_excel,
-  exec_query_eg_payments_excel
+  exec_query_eg_payments_excel,
+  search_hrms,
+  search_mdms_terms_and_conditions,
+  search_measurementBookDetails
 };

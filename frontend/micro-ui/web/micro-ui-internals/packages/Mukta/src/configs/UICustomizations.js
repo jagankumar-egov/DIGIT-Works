@@ -391,7 +391,7 @@ export const UICustomizations = {
       const ward = data?.body?.inbox?.moduleSearchCriteria?.ward?.[0]?.code;
       delete data.body.inbox.moduleSearchCriteria.ward;
       if (ward) data.body.inbox.moduleSearchCriteria.ward = ward;
-      estimateId = data?.body?.inbox?.moduleSearchCriteria?.estimateId?.trim();
+      let estimateId = data?.body?.inbox?.moduleSearchCriteria?.estimateId?.trim();
       if (!(data?.body?.inbox?.moduleSearchCriteria?.estimateId?.includes("RE")) && estimateId) data.body.inbox.moduleSearchCriteria.estimateId = estimateId;
       if (data?.body?.inbox?.moduleSearchCriteria?.estimateId?.includes("RE") && estimateId) {
         data.body.inbox.moduleSearchCriteria.revisionNumber = estimateId;
@@ -440,9 +440,9 @@ export const UICustomizations = {
       if (key === "ES_COMMON_PROJECT_NAME") {
         return (
           <div class="tooltip">
-            <span class="textoverflow" style={{ "--max-width": `${column.maxLength}ch` }}>
+            <div class="textoverflow" style={{ "--max-width": column.maxLength ? `${column.maxLength}ch` : `30ch`, wordBreak: "break-all" }}>
               {String(value ? value : t("ES_COMMON_NA"))}
-            </span>
+            </div>
             {/* check condtion - if length greater than 20 */}
             <span class="tooltiptext" style={{ whiteSpace: "nowrap" }}>
               {row?.businessObject?.project?.description || t("ES_COMMON_NA")}
@@ -593,16 +593,16 @@ export const UICustomizations = {
             t("ES_COMMON_NA")
           );
 
-        case "WORKS_PROJECT_NAME": {
-          let currentProject = searchResult?.filter((result) => result?.id === row?.id)[0];
+          case "WORKS_PROJECT_NAME": 
+          { let currentProject = searchResult?.filter((result) => result?.id === row?.id)[0];
           return (
-            <div class="tooltip">
-              <span class="textoverflow" style={{ "--max-width": `${column?.maxLength}ch` }}>
-                {String(t(value))}
-              </span>
-              {/* check condtion - if length greater than 20 */}
-              <span class="tooltiptext" style={{ whiteSpace: "nowrap" }}>
-                {currentProject?.description}
+          <div class="tooltip">
+            <div class="textoverflow" style={{ "--max-width": column.maxLength ? `${column.maxLength}ch` : `30ch`, wordBreak: "break-all" }}>       
+              {String(t(value))}
+            </div>
+            {/* check condtion - if length greater than 20 */}
+            <span class="tooltiptext" style={{ whiteSpace: "nowrap" }}>
+              {currentProject?.description}
               </span>
             </div>
           );
@@ -735,16 +735,16 @@ export const UICustomizations = {
             t("ES_COMMON_NA")
           );
 
-        case "WORKS_PROJECT_NAME": {
-          let currentProject = searchResult?.filter((result) => result?.businessObject?.id === row?.businessObject?.id)[0];
-          return (
-            <div class="tooltip">
-              <span class="textoverflow" style={{ "--max-width": `${column?.maxLength}ch` }}>
-                {String(t(value))}
-              </span>
-              {/* check condtion - if length greater than 20 */}
-              <span class="tooltiptext" style={{ whiteSpace: "nowrap" }}>
-                {currentProject?.businessObject?.description}
+          case "WORKS_PROJECT_NAME": 
+          { let currentProject = searchResult?.filter((result) => result?.businessObject?.id === row?.businessObject?.id)[0];
+        return (
+          <div class="tooltip">
+            <div class="textoverflow" style={{ "--max-width": column.maxLength ? `${column.maxLength}ch` : `30ch`, wordBreak: "break-all" }}>        
+              {String(t(value))}
+            </div>
+            {/* check condtion - if length greater than 20 */}
+            <span class="tooltiptext" style={{ whiteSpace: "nowrap" }}>
+              {currentProject?.businessObject?.description}
               </span>
             </div>
           );
@@ -853,9 +853,9 @@ export const UICustomizations = {
       if (key === "ES_COMMON_PROJECT_NAME") {
         return (
           <div class="tooltip">
-            <span class="textoverflow" style={{ "--max-width": `${column.maxLength}ch` }}>
+            <div class="textoverflow" style={{ "--max-width": column.maxLength ? `${column.maxLength}ch` : `30ch`, wordBreak: "break-all" }}>
               {String(t(value))}
-            </span>
+            </div>
             {/* check condtion - if length greater than 20 */}
             <span class="tooltiptext" style={{ whiteSpace: "nowrap" }}>
               {row?.businessObject?.additionalDetails?.projectDesc || t("ES_COMMON_NA")}
@@ -865,7 +865,7 @@ export const UICustomizations = {
       }
 
       if (key === "CORE_COMMON_STATUS") {
-        return <span>{t(`WF_MUSTOR_${value}`)}</span>;
+        return <span>{t(`WF_MR_STATUS_${value}`)}</span>
       }
 
       if (key === "MUSTER_WAGE_AMOUNT") {
@@ -995,10 +995,16 @@ export const UICustomizations = {
       const endDate = Digit.Utils.pt.convertDateToEpoch(data.body.inbox?.moduleSearchCriteria?.createdTo,'dayend');
       let workOrderNumber, revisedWorkOrderNumber;
       if(data.body.inbox?.moduleSearchCriteria?.workOrderNumber?.includes("WO"))
-         workOrderNumber = data.body.inbox?.moduleSearchCriteria?.workOrderNumber?.trim();
+        workOrderNumber = data.body.inbox?.moduleSearchCriteria?.workOrderNumber?.trim();
       else
         revisedWorkOrderNumber = data.body.inbox?.moduleSearchCriteria?.workOrderNumber?.trim();
-      const status = data?.body?.inbox?.moduleSearchCriteria?.status?.[0]?.wfStatus
+      
+      let status = data?.body?.inbox?.moduleSearchCriteria?.status?.[0]?.wfStatus
+
+       //Added the condition because to revised work order, it will have state as approved instead of pending for acceptance
+       if(status === "PENDING_FOR_ACCEPTANCE")
+       status = [...status, "APPROVED"]
+
       const projectType = data.body.inbox?.moduleSearchCriteria?.projectType?.code;
       const projectName = data.body.inbox?.moduleSearchCriteria?.projectName?.trim();
       const ward = data.body.inbox?.moduleSearchCriteria?.ward?.[0]?.code;
@@ -1063,9 +1069,9 @@ export const UICustomizations = {
         case "WORKS_PROJECT_NAME":
           return (
             <div class="tooltip">
-              <span class="textoverflow" style={{ "--max-width": `${column.maxLength}ch` }}>
+              <div class="textoverflow" style={{ "--max-width": column.maxLength ? `${column.maxLength}ch` : `30ch`, wordBreak: "break-all" }}>
                 {String(t(value))}
-              </span>
+              </div>
               {/* check condtion - if length greater than 20 */}
               <span class="tooltiptext" style={{ whiteSpace: "nowrap" }}>
                 {row?.businessObject?.additionalDetails?.projectDesc || t("ES_COMMON_NA")}
@@ -1542,9 +1548,9 @@ export const UICustomizations = {
       if (key === "WORKS_PROJECT_NAME") {
         return (
           <div class="tooltip">
-            <span class="textoverflow" style={{ "--max-width": `${column.maxLength}ch` }}>
+            <div class="textoverflow" style={{ "--max-width": column.maxLength ? `${column.maxLength}ch` : `30ch`, wordBreak: "break-all" }}>
               {String(value ? value : t("ES_COMMON_NA"))}
-            </span>
+            </div>
             {/* check condtion - if length greater than 20 */}
             <span class="tooltiptext" style={{ whiteSpace: "nowrap" }}>
               {row?.businessObject?.additionalDetails?.projectDesc || t("ES_COMMON_NA")}
@@ -1734,9 +1740,9 @@ export const UICustomizations = {
       if (key === "WORKS_PROJECT_NAME") {
         return (
           <div class="tooltip">
-            <span class="textoverflow" style={{ "--max-width": `${column.maxLength}ch` }}>
+              <div class="textoverflow" style={{ "--max-width": column.maxLength ? `${column.maxLength}ch` : `30ch`, wordBreak: "break-all" }}>
               {String(value ? value : t("ES_COMMON_NA"))}
-            </span>
+            </div>
             {/* check condtion - if length greater than 20 */}
             <span class="tooltiptext" style={{ whiteSpace: "nowrap" }}>
               {row?.businessObject?.additionalDetails?.projectDesc || t("ES_COMMON_NA")}
@@ -2078,9 +2084,9 @@ export const UICustomizations = {
       if (key === "WORKS_PROJECT_NAME") {
         return (
           <div class="tooltip">
-            <span class="textoverflow" style={{ "--max-width": `${column.maxLength}ch` }}>
+              <div class="textoverflow" style={{ "--max-width": column.maxLength ? `${column.maxLength}ch` : `30ch`, wordBreak: "break-all" }}>
               {String(value ? value : t("ES_COMMON_NA"))}
-            </span>
+            </div>
             {/* check condtion - if length greater than 20 */}
             <span class="tooltiptext" style={{ whiteSpace: "nowrap" }}>
               {row?.businessObject?.additionalDetails?.projectDesc || t("ES_COMMON_NA")}
@@ -2559,7 +2565,7 @@ export const UICustomizations = {
         case "MB_ASSIGNEE":
           return value ? <span>{value?.[0]?.name}</span> : <span>{t("NA")}</span>;
         case "MB_WORKFLOW_STATE":
-          return <span>{t(value)}</span>;
+          return <span>{t(`MB_STATE_${value}`)}</span>;
         case "MB_AMOUNT":
           return <Amount customStyle={{ textAlign: "right" }} value={Math.round(value)} t={t}></Amount>;
         case "MB_SLA_DAYS_REMAINING":

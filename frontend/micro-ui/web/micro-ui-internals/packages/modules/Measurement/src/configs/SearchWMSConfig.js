@@ -66,7 +66,7 @@ const SearchMeasurementConfig = () => {
                 type: "text",
                 isMandatory: false,
                 disable: false,
-                populators: { name: "projectName", validation: { pattern: /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i, maxlength: 140 } },
+                populators: { name: "projectName", validation: { pattern: "^[^\\$\"<>?\\\\~`!@$%^()+={}\\[\\]*:;“”‘’]{1,50}$", maxlength: 140 } },
               },
               {
                 label: "MB_NUMBER",
@@ -80,7 +80,7 @@ const SearchMeasurementConfig = () => {
                 },
               },
               {
-                label: "MB_REFERENCE_NUMBER",
+                label: "MB_SEARCH_REFERENCE_NUMBER",
                 type: "text",
                 isMandatory: false,
                 disable: false,
@@ -175,7 +175,7 @@ const SearchMeasurementConfig = () => {
                  additionalCustomization: true,
               },
               {
-                label: "MB_REFERENCE_NUMBER",
+                label: "MB_SEARCH_REFERENCE_NUMBER",
                 jsonPath: "businessObject.referenceId",
               },
               {

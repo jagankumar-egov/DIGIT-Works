@@ -104,9 +104,9 @@ const InboxMeasurementConfig = () => {
               roles: ["MB_CREATOR"],
             },
           ],
-          label: "ES_COMMON_ATTENDENCEMGMT",
+          label: "ACTION_TEST_MEASUREMENT_HEADER",
           logoIcon: {
-            component: "MeasurementIcon",
+            component: "MeasurementMuktaIcon",
             customClass: "inbox-search-icon--projects",
           },
         },

@@ -105,6 +105,7 @@ public class Configuration {
     @Value("${egov.workflow.processinstance.search.path}")
     private String wfProcessInstanceSearchPath;
 
+
     // MDMS
     @Value("${egov.mdms.host}")
     private String mdmsHost;
@@ -129,6 +130,9 @@ public class Configuration {
     // SMSNotification
     @Value("${egov.sms.notification.topic}")
     private String smsNotificationTopic;
+
+    @Value("${kafka.topics.works.notification.sms.name}")
+    private String muktaNotificationTopic;
 
     //topic config
     @Value("${org.kafka.create.topic}")
@@ -188,5 +192,19 @@ public class Configuration {
     @Value("${egov.localization.statelevel}")
     private Boolean isLocalizationStateLevel;
 
+    // Encryption Config
+    @Value("${egov.enc.host}")
+    private String encryptionHost;
 
+    @Value("${egov.enc.encrypt.endpoint}")
+    private String encryptionEndpoint;
+
+    @Value("${egov.enc.decrypt.endpoint}")
+    private String decryptionEndpoint;
+
+    @Value("${state.level.tenant.id}")
+    private String stateLevelTenantId;
+	
+	@Value("${sms.isAdditonalFieldRequired}")
+    private boolean isAdditonalFieldRequired;
 }

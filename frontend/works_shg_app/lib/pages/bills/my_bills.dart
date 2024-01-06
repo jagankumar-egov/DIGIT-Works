@@ -171,7 +171,7 @@ class _MyBillsPage extends State<MyBillsPage> {
                                       i18.myBills.netPayable:
                                           '₹ ${((e.bill?.totalAmount ?? 0) - deduction).ceil()}',
                                       i18.common.status:
-                                          'BILL_STATUS_${e.bill?.wfStatus ?? 'NA'}',
+                                          'BILL_STATE_${e.bill?.wfStatus ?? 'NA'}',
                                       Constants.activeInboxStatus:
                                           e.bill?.wfStatus == approvedCode
                                               ? 'true'
@@ -229,12 +229,12 @@ class _MyBillsPage extends State<MyBillsPage> {
                                                   ?.invoiceDate ??
                                               0)
                                           : i18.common.noValue,
-                                      i18.myBills.payeeName:
-                                          e.bill?.payer?.identifier,
+                                      // i18.myBills.payeeName:
+                                      //     e.bill?.payer?.identifier,
                                       i18.myBills.netPayable:
                                           '₹ ${((e.bill?.totalAmount ?? 0) - deduction).ceil()}',
                                       i18.common.status:
-                                          'BILL_STATUS_${e.bill?.wfStatus ?? 'NA'}',
+                                          'BILL_STATE_${e.bill?.wfStatus ?? 'NA'}',
                                       Constants.activeInboxStatus:
                                           e.bill?.wfStatus == approvedCode
                                               ? 'true'
@@ -277,12 +277,12 @@ class _MyBillsPage extends State<MyBillsPage> {
                                               ?.additionalDetails
                                               ?.projectDesc ??
                                           i18.common.noValue,
-                                      i18.myBills.payeeName:
-                                          e.bill?.payer?.identifier,
+                                      // i18.myBills.payeeName:
+                                      //     e.bill?.payer?.identifier,
                                       i18.myBills.netPayable:
                                           '₹ ${((e.bill?.totalAmount ?? 0) - deduction).ceil()}',
                                       i18.common.status:
-                                          'BILL_STATUS_${e.bill?.wfStatus ?? 'NA'}',
+                                          'BILL_STATE_${e.bill?.wfStatus ?? 'NA'}',
                                       Constants.activeInboxStatus:
                                           e.bill?.wfStatus == approvedCode
                                               ? 'true'

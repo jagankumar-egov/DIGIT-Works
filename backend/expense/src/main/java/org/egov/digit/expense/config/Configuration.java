@@ -161,6 +161,12 @@ public class Configuration {
 	@Value("${works.contract.endpoint}")
 	private String contractServiceEndpoint;
 
+
+	@Value("${kafka.topics.works.notification.sms.name}")
+	private String muktaNotificationTopic;
+	@Value("${sms.isAdditonalFieldRequired}")
+	private boolean isAdditonalFieldRequired;
+
 	//Individual Service
 	@Value("${works.individual.host}")
 	private String individualServiceHost;

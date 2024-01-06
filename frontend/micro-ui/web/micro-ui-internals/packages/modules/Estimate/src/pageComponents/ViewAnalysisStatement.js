@@ -14,7 +14,7 @@ const ViewAnalysisStatement = ({watch,formState,...props}) => {
     const {t} = useTranslation();
     const { register, errors, setValue, getValues, formData } = props
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    let isCreateOrUpdate = /(measurement\/create|estimate\/create-detailed-estimate|estimate\/update-detailed-estimate|measurement\/update)/.test(window.location.href);
+    let isCreateOrUpdate = /(measurement\/create|estimate\/create-detailed-estimate|estimate\/update-detailed-estimate|measurement\/update|estimate\/create-revision-detailed-estimate|estimate\/update-revision-detailed-estimate)/.test(window.location.href);
     let isEstimateCreateorUpdate = /(estimate\/create-detailed-estimate|estimate\/update-detailed-estimate|estimate\/create-revision-detailed-estimate|estimate\/update-revision-detailed-estimate)/.test(window.location.href);
     //Defined the codes for charges upserted in mdmsV2
     const ChargesCodeMapping = {
@@ -74,10 +74,15 @@ const ViewAnalysisStatement = ({watch,formState,...props}) => {
                 return (tot + amount * ob?.currentMBEntry)
             },0);
         }
-
+        if(window.location.href.includes("estimate-details"))
+        {
+                    if(category === "LA" && SORAmount == 0 && formData?.additionalDetails?.labourMaterialAnalysis?.labour) SORAmount =  formData?.additionalDetails?.labourMaterialAnalysis?.labour;
+                    if(category === "MA" && SORAmount == 0 && formData?.additionalDetails?.labourMaterialAnalysis?.material) SORAmount =  formData?.additionalDetails?.labourMaterialAnalysis?.material;
+                    if(category === "MHA" && SORAmount == 0 && formData?.additionalDetails?.labourMaterialAnalysis?.machinery) SORAmount =  formData?.additionalDetails?.labourMaterialAnalysis?.machinery;
+        }
         //Conditions is used in the case of View details to capture the data from additional details
         // if(category === "LA" && SORAmount == 0 && formData?.additionalDetails?.labourMaterialAnalysis?.labour) return formData?.additionalDetails?.labourMaterialAnalysis?.labour;
-        // if(category === "MA" && SORAmount == 0 && formData?.additionalDetails?.labourMaterialAnalysis?.material) return formData?.additionalDetails?.labourMaterialAnalysis?.material;
+        // if(category === "MA" && SORAmount =getAnalysisCost= 0 && formData?.additionalDetails?.labourMaterialAnalysis?.material) return formData?.additionalDetails?.labourMaterialAnalysis?.material;
         // if(category === "MHA" && SORAmount == 0 && formData?.additionalDetails?.labourMaterialAnalysis?.machinery) return formData?.additionalDetails?.labourMaterialAnalysis?.machinery;
         // if(window.location.href.includes("update-detailed-estimate"))
         // {
@@ -87,19 +92,19 @@ const ViewAnalysisStatement = ({watch,formState,...props}) => {
         // }
 
         SORAmount = SORAmount ? SORAmount : 0;
-        return Digit.Utils.dss.formatterWithoutRound((SORAmount).toFixed(2),"number");        
+        return Digit.Utils.dss.formatterWithoutRound((parseFloat(SORAmount)).toFixed(2),"number")?.includes(".") ? Digit.Utils.dss.formatterWithoutRound((parseFloat(SORAmount)).toFixed(2),"number") : `${Digit.Utils.dss.formatterWithoutRound((parseFloat(SORAmount)).toFixed(2),"number")}.00`;        
     }
     
    
     
   return (
         <Fragment>
-        <LinkButton className="view-Analysis-button" style={isCreateOrUpdate ? {marginTop:"-3.5%",textAlign:"center"}: {textAlign:"center"}} onClick={() => setIsPopupOpen(true)} label={isEstimate ? t("ESTIMATE_ANALYSIS_STM") : t("MB_UTILIZATION_STM")}></LinkButton>
+        <LinkButton className="view-Analysis-button" style={isCreateOrUpdate ? {marginTop:"-3.5%",textAlign:"center", width:"17%"}: {textAlign:"center",width:"17%"}} onClick={() => setIsPopupOpen(true)} label={isEstimate ? t("ESTIMATE_ANALYSIS_STM") : t("MB_UTILIZATION_STM")}></LinkButton>
         {isPopupOpen && <PopUp>
             <div className="popup-view-alaysis">
             <Card>
             <CardSectionHeader className="estimate-analysis-cardheader">{isEstimate ? t(`ESTIMATE_COST_ANALYSIS_HEADER`): t(`MB_UTILIZATION_STM_HEADER`)}</CardSectionHeader>
-            <LabelFieldPair style={{marginBottom:'1rem', marginTop:"5rem", justifyContent:"space-between"}}>
+            <LabelFieldPair style={{marginBottom:'1rem', marginTop:"3rem", justifyContent:"space-between"}}>
                 <CardLabel className="analysis-estimate-label">{isEstimate ? `${t(`ESTIMATE_LABOUR_COST`)}`: t(`MB_LABOUR_UTILIZATION`)}</CardLabel>
                 <CardLabel>{getAnalysisCost(ChargesCodeMapping?.LabourCost)}</CardLabel>
             </LabelFieldPair >
@@ -112,7 +117,7 @@ const ViewAnalysisStatement = ({watch,formState,...props}) => {
                 <CardLabel>{getAnalysisCost(ChargesCodeMapping?.MachineryCost)}</CardLabel>
             </LabelFieldPair>
             <Button
-             style={{marginLeft:"85%", width:"16%"}}
+             style={{marginLeft:"70%", width:"30%"}}
              label={"OK"}
              variation="primary"
              onButtonClick={() => {

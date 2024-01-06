@@ -173,8 +173,8 @@ class FinancialDetailsState extends State<FinancialDetailsPage> {
                     }),
                     DigitTextFormField(
                         formControlName: ifscCodeKey,
-                        label: t.translate(i18.common.ifscCode),
                         textCapitalization: TextCapitalization.characters,
+                        label: t.translate(i18.common.ifscCode),
                         onChanged: (val) async {
                           final url = Uri.parse(
                               '${Urls.commonServices.bankDetails}/${form.value[ifscCodeKey]}');

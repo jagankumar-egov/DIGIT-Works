@@ -205,6 +205,8 @@ class WorkOrder {
   String get requestID => 'WORKS_TIME_EXT_REQUEST_ID';
   String get timeExtensionRequestedSuccessSubText =>
       'WORKS_TIME_EXTENSION_REQ_SUCCESSFULLY_SUB_TEXT';
+  String get timeExtensionRequestedUpdatedSuccessfully =>
+      'WORKS_TIME_EXTENSION_REQ_UPDATED_SUCCESSFULLY';
   String get requestTimeExtension => 'ACTION_TEST_TIME_EXTENSION';
   String get projectClosure => 'ACTION_TEST_PROJECT_CLOSURE';
   String get errNoMusterRollExists => 'ERR_NO_MUSTER_EXISTS';
@@ -315,6 +317,7 @@ class AttendanceMgmt {
   String get skill => 'ATM_SKILLS';
   String get skillDetails => 'ATM_SKILLS_DETAILS';
   String get reviewSkills => 'ATM_REVIEW_SKILLS_FOR_EACH_ATTENDEE';
+  String get noSkillPresent => 'ATM_NO_SKILL_IS_PRESENT';
   String get attendanceChangedValidation =>
       'ATM_ATT_CHANGED_CLICK_SAVE_DRAFT_FIRST';
   String get individualDetails => 'ATM_INDIVIDUAL_DETAILS';

@@ -11,7 +11,7 @@ const ROLES = {
   PAYMENT: ["BILL_ACCOUNTANT"],
   MUSTERROLLS: ["MUSTER_ROLL_VERIFIER", "MUSTER_ROLL_APPROVER"],
   MEASUREMENT: ["MB_CREATOR", "MB_VERIFIER", "MB_APPROVER", "MB_VIEWER"],
-
+  WORKBENCH : ["MDMS_ADMIN", "MDMS_STATE_ADMIN", "MDMS_CITY_ADMIN"],
   DSS: ["STADMIN"],
 };
 
@@ -190,6 +190,7 @@ const WorksCard = () => {
       roles: ROLES.BILLS,
       count: isLoadingBilling ? "-" : dataBilling?.totalCount,
     },
+    // We are hiding this button beacuse of latest requirement i.e PFM-4316
     // {
     //   label: t("ACTION_TEST_5PAYMENT"),
     //   link: `/${window?.contextPath}/employee/expenditure/search-bill?status=APPROVED`,
@@ -214,6 +215,11 @@ const WorksCard = () => {
       label: t("EXP_PAYMENT_INS"),
       link: `/${window?.contextPath}/employee/expenditure/search-payment-instruction`,
       roles: ROLES.PAYMENT,
+    },
+    {
+      label: t("ACTION_TEST_9WORKBENCH"),
+      link: `/workbench-ui/employee/workbench/manage-master-data`,
+      roles: ROLES.WORKBENCH,
     }
   ];
 

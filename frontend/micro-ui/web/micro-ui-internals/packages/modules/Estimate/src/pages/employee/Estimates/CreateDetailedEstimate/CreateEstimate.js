@@ -77,6 +77,19 @@ const CreateEstimate = ({props}) => {
     },
   });
 
+ //fetching all the estimates for revision original values
+ const requestrevisionCriteria = {
+  url: "/estimate/v1/_search",
+  params : {tenantId : tenantId , estimateNumber : estimateNumber},
+  config : {
+    cacheTime : 0
+  },
+  changeQueryName: "allDetailedEstimate"
+};
+
+//fetching estimate data
+const {isLoading: isAllEstimateLoading, data: allEstimates} = Digit.Hooks.useCustomAPIHook(requestrevisionCriteria);
+
   actionMB = actionMB && (isEdit || isEditRevisionEstimate) && estimate && estimate?.wfStatus==="PENDINGFORCORRECTION" ? actionMB?.filter((ob) => ob?.name !== "DRAFT") : actionMB;
 
   const searchParams = {
@@ -209,6 +222,29 @@ const CreateEstimate = ({props}) => {
     }
   );
 
+  const requestCriteria = {
+    url: "/mdms-v2/v1/_search",
+    body: {
+    MdmsCriteria: {
+        tenantId: tenantId,
+        moduleDetails: [
+        {
+            moduleName: "WORKS-SOR",
+            masterDetails: [
+            {
+                name: "Rates",
+                //filter: `[?(@.sorId=='${sorid}')]`,
+            },
+            ],
+        },
+        ],
+    },
+    },
+    changeQueryName:"ratesQuery"
+};
+
+const { isRatesLoading, data : RatesData} = Digit.Hooks.useCustomAPIHook(requestCriteria);
+
   const moduleName = Digit.Utils.getConfigModuleName();
   let { isLoading: isConfigLoading, data: estimateFormConfig } = Digit.Hooks.useCustomMDMS(
     tenant,
@@ -244,7 +280,7 @@ const CreateEstimate = ({props}) => {
   const EstimateSession = Digit.Hooks.useSessionStorage("NEW_ESTIMATE_CREATE", sorAndNonSorData);
   const [sessionFormData, setSessionFormData, clearSessionFormData] = EstimateSession;
 
-  const initialDefaultValues = editEstimateUtil(estimate, uom, overheads, props?.RatesData);
+  const initialDefaultValues = RatesData ? editEstimateUtil(estimate, uom, overheads, RatesData, allEstimates) : {};
 
   // useEffect(() => {
 
@@ -254,7 +290,7 @@ const CreateEstimate = ({props}) => {
     if (uom && estimate && overheads && (isEdit || isCreateRevisionEstimate || isEditRevisionEstimate)) {
        setSessionFormData(initialDefaultValues)
     }
-  }, [estimate, uom, overheads]);
+  }, [estimate, uom, overheads, RatesData]);
 
   const onFormValueChange = (setValue, formData, formState, reset, setError, clearErrors, trigger, getValues) => {
     if (!_.isEqual(formData, sessionFormData)) {
@@ -294,14 +330,14 @@ const CreateEstimate = ({props}) => {
   function validateData(data){
 
     // To validate either SOR or NON SOR must be present
-    if((!data?.SORtable) && !(data?.NONSORtable))
+    if(((!data?.SORtable) && !(data?.NONSORtable)) || (data?.SORtable?.length <= 0 && data?.NONSORtable?.length <= 0))
     {  
       setShowToast({ error: true, label: "ERR_ATLEAST_SOR_OR_NON_SOR_PRESENT" });
       setShowModal(false);
       return false;
     }
     //To validate that if SOR is present it should have measures
-    if(data?.SORtable?.filter((ob) => ob?.sorCode && (!(ob?.currentMBEntry) || ob?.currentMBEntry <= 0))?.length > 0)
+    if(data?.SORtable?.filter((ob) => ob?.sorCode && (!(ob?.currentMBEntry)))?.length > 0)
     {
       setShowToast({ error: true, label: "ERR_MB_AMOUNT_IS_NOT_RIGHT_FOR_SOR" });
       setShowModal(false);
@@ -323,7 +359,7 @@ const CreateEstimate = ({props}) => {
     let negativeValuedObject = data?.SORtable?.find(item => parseFloat(item.amount) < 0) || data?.NONSORtable?.find(item => parseFloat(item.amount) < 0)
     if(negativeValuedObject)
     {
-      setShowToast({ error: true, label: `${t("ERR_NEGATIVE_VALUE_IS_NOT_ALLOWED")} ${negativeValuedObject?.catgeory} ${negativeValuedObject?.sorId || negativeValuedObject?.sorCode}` });
+      setShowToast({ error: true, label: `${t("ERR_NEGATIVE_VALUE_IS_NOT_ALLOWED")} ${negativeValuedObject?.category}` });
       setShowModal(false);
       return false;
     }
@@ -556,7 +592,7 @@ const CreateEstimate = ({props}) => {
     );
   }, [approvers]);
 
-  if (isConfigLoading || isEstimateLoading || isUomLoading || isOverheadsLoading || isDocLoading) {
+  if (isConfigLoading || isEstimateLoading || isUomLoading || isOverheadsLoading || isDocLoading || isAllEstimateLoading || isRatesLoading) {
     return <Loader />;
   }
   if ((isEdit || isCreateRevisionEstimate || isEditRevisionEstimate) && Object.keys(sessionFormData).length === 0) return <Loader />;

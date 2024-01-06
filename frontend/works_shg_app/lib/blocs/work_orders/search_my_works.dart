@@ -11,6 +11,7 @@ import 'package:works_shg_app/utils/global_variables.dart';
 
 import '../../data/remote_client.dart';
 import '../../models/works/contracts_model.dart';
+import '../../utils/constants.dart';
 
 part 'search_my_works.freezed.dart';
 
