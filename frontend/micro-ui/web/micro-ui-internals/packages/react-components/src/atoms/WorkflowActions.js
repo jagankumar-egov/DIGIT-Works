@@ -7,7 +7,7 @@ import ActionModal from "./Modals";
 import { Loader } from "./Loader";
 import Toast from "./Toast";
 import { useHistory } from "react-router-dom";
-const WorkflowActions = ({ businessService, tenantId, applicationNo, forcedActionPrefix, ActionBarStyle = {}, MenuStyle = {}, applicationDetails, url, setStateChanged, moduleCode,editApplicationNumber,editCallback ,callback}) => {
+const WorkflowActions = ({ businessService, tenantId, applicationNo, forcedActionPrefix, ActionBarStyle = {}, MenuStyle = {}, applicationDetails, url, setStateChanged, moduleCode,editApplicationNumber,editCallback ,callback, WorflowValidation, fullData}) => {
   
   const history = useHistory()
   const { estimateNumber, mbNumber, workOrderNumber } = Digit.Hooks.useQueryParams();
@@ -110,9 +110,13 @@ const WorkflowActions = ({ businessService, tenantId, applicationNo, forcedActio
         editCallback()
         return 
     }
+    if(bsAttendance === businessService && action?.action === "APPROVE"){
+      WorflowValidation(setShowModal);
+      return 
+    }
 
     if(bsPurchaseBill === businessService && action?.action==="RE-SUBMIT"){
-      history.push(`/${window?.contextPath}/employee/expenditure/create-purchase-bill?tenantId=${tenantId}&billNumber=${editApplicationNumber}`);
+      history.push(`/${window?.contextPath}/employee/expenditure/create-purchase-bill?tenantId=${tenantId}&billNumber=${editApplicationNumber}&workOrderNumber=${fullData?.contract?.contractNumber}`);
       return 
     }
 
