@@ -7,6 +7,8 @@ on:
       - 'master'
       # Push events to branches matching refs/heads/mona/octocat
       - 'develop'
+      # Push events to branches matching refs/heads/releases/10
+      - 'publish-**' 
     paths:
       - 'frontend/micro-ui/web/micro-ui-internals/**'
   pull_request:
